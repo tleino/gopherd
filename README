@@ -1,0 +1,29 @@
+gopherd
+=======
+
+A super simple forking gopherd that uses chroot + privdrop,
+or pledge + unveil if available.
+
+Compile & Install
+=================
+
+./configure ~
+make install
+
+Run
+===
+
+Any of these can work:
+
+gopherd \*
+
+gopherd 0.0.0.0:70
+
+gopherd 192.168.0.1:70
+
+gopherd 192.168.0.1:70 /var/pub/gopher
+
+gopherd 192.168.0.1:70 /var/pub/gopher myhost.com
+
+The gopherd expects to have a "map" file in the specified root
+directory, which is by default /var/gopher.

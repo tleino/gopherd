@@ -1,0 +1,21 @@
+.Dd $Mdocdate: May 22 2021 $
+.Dt GOPHERD 1
+.Os
+.Sh NAME
+.Nm gopherd
+.Nd a very simple gopher daemon
+.Sh SYNOPSIS
+.Nm
+.Ar ip Op :port 
+.Op Ar rootpath
+.Op Ar hostname
+.Sh DESCRIPTION
+.Nm gopherd
+is a super simple forking gopherd that uses chroot + privdrop,
+or pledge + unveil if available. The
+.Nm gopherd
+expects to find 'map' file from the specified root path.
+.Sh EXAMPLES
+To serve files from ~/gopherhole on host example.com:
+.Pp
+.Dl $ gopherd 0.0.0.0:70 ~/gopherhole example.com

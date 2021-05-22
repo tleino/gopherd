@@ -1,0 +1,24 @@
+#!/bin/sh
+
+check_args() {
+	while [ $# -ne 0 ] ; do
+		case $1 in
+			-* )
+				if [ "$1" != "--help" ] ; then
+					echo "$0: unknown option: $1"
+				fi
+				echo "Usage: $0 [prefix]"
+				exit 1
+			;;
+			* ) prefix=$1 ;;
+		esac
+		shift
+	done
+	echo "prefix=${prefix}"
+}
+
+prefix=/usr/local
+check_args $*
+
+echo "create: Makefile"
+sed "s|@prefix@|${prefix}|g" Makefile.in >Makefile

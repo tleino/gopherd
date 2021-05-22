@@ -1,0 +1,46 @@
+SHELL = /bin/sh
+CFLAGS = -g -Wall -pedantic -std=c99
+
+prefix = @prefix@
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+datarootdir = $(prefix)/share
+mandir = $(datarootdir)/man
+includedir = $(prefix)/include
+
+PROG = gopherd
+MAN = gopherd.1
+OBJS = session.o sendfile.o serve.o tcpbind.o validselector.o makesafe.o \
+	gopherd.o
+
+INSTALL = install
+INSTALLFLAGS = -D
+
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(CC) -o$@ $(OBJS)
+
+.c.o:
+	$(CC) -c $(CFLAGS) $<
+
+clean:
+	rm -f $(OBJS) $(PROG)
+
+install: $(PROG)
+	$(INSTALL) $(INSTALLFLAGS) -m 555 $(PROG) $(DESTDIR)$(bindir)/
+	$(INSTALL) $(INSTALLFLAGS) -m 444 $(MAN) $(DESTDIR)$(mandir)/man1/
+
+uninstall:
+	rm -f $(DESTDIR)$(bindir)/$(PROG)
+	rm -f $(DESTDIR)$(mandir)/man1/$(MAN)
+
+# Dependencies
+gopherd.o: gopherd.c
+makesafe.o: makesafe.c
+sendfile.o: sendfile.c
+serve.o: serve.c
+session.o: session.c
+tcpbind.o: tcpbind.c
+validselector.o: validselector.c
