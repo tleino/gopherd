@@ -1,5 +1,5 @@
 SHELL = /bin/sh
-CFLAGS = -g -Wall -pedantic -std=c99
+CFLAGS = -g -Wall -pedantic -std=c99 @SYSTEM_CFLAGS@
 
 prefix = @prefix@
 exec_prefix = $(prefix)

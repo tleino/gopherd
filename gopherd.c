@@ -11,6 +11,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
+#ifdef __linux__
+#include <grp.h>
+#endif
 
 int serve(int);
 int tcpbind(const char *, int);
@@ -120,7 +123,9 @@ int main(int argc, char **argv)
 			continue;
 		if ((pid = fork()) == 0) {
 			alarm(10);	/* session expire time */
+#ifdef __OpenBSD__
 			setproctitle("session");
+#endif
 #ifdef __OpenBSD__
 			if (pledge("stdio rpath", NULL) < 0)
 				err(1, "pledge");

@@ -1,5 +1,8 @@
 #include <libgen.h>
 #include <limits.h>
+#ifdef __linux__
+#include <linux/limits.h>
+#endif
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
@@ -9,10 +12,16 @@ int validselector(const char *selector, const char *host)
 	enum { TITLE=0, SELECTOR, HOST, PORT };
 	FILE *fp;
 	char line[256], file[PATH_MAX];
+	char sel[PATH_MAX], *dn;
 
-	if (*dirname(selector) != '/')
+	if (snprintf(sel, sizeof(sel), "%s", selector) >= sizeof(sel))
+		return 0;		/* truncated selector */
+
+	dn = dirname(sel);
+
+	if (*dn != '/')
 		return 0;		/* relative path */
-	snprintf(file, sizeof(file), "%smap", dirname(selector));
+	snprintf(file, sizeof(file), "%smap", dn);
 	if ((fp = fopen(file, "r")) == NULL)
 		return 0;		/* cannot access file */
 	while (fgets(line, sizeof(line), fp) != NULL) {

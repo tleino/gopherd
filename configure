@@ -20,5 +20,20 @@ check_args() {
 prefix=/usr/local
 check_args $*
 
+SYSTEM_CFLAGS=
+case $(uname) in
+	Linux )
+		SYSTEM_CFLAGS="-D_XOPEN_SOURCE=500 -D_GNU_SOURCE -D_DEFAULT_SOURCE"
+	;;
+	OpenBSD )
+		SYSTEM_CFLAGS=
+	;;
+esac
+echo "system: $(uname)"
+echo "SYSTEM_CFLAGS=" ${SYSTEM_CFLAGS}
+
 echo "create: Makefile"
-sed "s|@prefix@|${prefix}|g" Makefile.in >Makefile
+sed \
+	-e "s|@prefix@|${prefix}|g" \
+	-e "s|@SYSTEM_CFLAGS@|${SYSTEM_CFLAGS}|g" \
+	Makefile.in >Makefile
